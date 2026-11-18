@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFE RESET</title>
+    <link rel="stylesheet" href="style.css">
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#e8c5d5">
+
+</head>
+<body>
+
+<div class="app">
+    <aside class="sidebar">
+        <h2>🌷 LIFE RESET</h2>
+        <p class="subtitle">Your life, your journey.</p>
+
+        <nav>
+            <button class="active" onclick="showPage('home', this)">🏠 Dashboard</button>
+            <button onclick="showPage('goals', this)">🎯 My Goals</button>
+            <button onclick="showPage('tasks', this)">📅 Daily Planner</button>
+            <button onclick="showPage('rescue', this)">
+    🧠 Procrastination Rescue
+    <button onclick="showPage('routine', this)">
+    🕒 Daily Routine
+</button>
+</button>
+            <button onclick="showPage('money', this)">💰 Expenses</button>
+            <button onclick="showPage('habits', this)">🌱 Habits</button>
+            <button onclick="showPage('journal', this)">📔 Journal</button>
+            <button onclick="showPage('progress', this)">📊 My Progress</button>
+            <button onclick="showPage('career', this)">
+    🎓 Career & Learning
+</button>
+        </nav>
+    </aside>
+
+    <main class="content">
+        <header>
+            <div>
+                <p class="subtitle">YOUR PERSONAL SPACE</p>
+                <h1 id="greeting">Welcome to a fresh start!</h1>
+                <p>Small steps. Big changes.</p>
+            </div>
+            <div class="date" id="today"></div>
+        </header>
+
+        <section id="home" class="page">
+            <div class="welcome">
+                <h2>You don't have to do everything today. 🌸</h2>
+                <p>Just take one step towards the life you want.</p>
+            </div>
+
+            <div class="cards">
+                <div class="card">
+                    <p>Active Goals</p>
+                    <h2 id="goalCount">0</h2>
+                </div>
+                <div class="card">
+                    <p>Tasks Completed</p>
+                    <h2 id="taskCount">0</h2>
+                </div>
+                <div class="card">
+                    <p>Money Spent</p>
+                    <h2 id="spentCount">₹0</h2>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Today's priorities</h2>
+                <div id="todayTasks">No tasks yet. Add your first task!</div>
+</div>
+
+<!-- DAILY STREAK -->
+<div class="panel reward-panel">
+    <h3>🔥 My Daily Streak</h3>
+    <h2 id="streakCount">0 Days</h2>
+    <p id="streakMessage">Start your journey today!</p>
+    <button id="checkInButton" onclick="dailyCheckIn()">
+        Check In Today 🌷
+    </button>
+</div>
+
+<!-- DAILY MOTIVATION -->
+<div class="panel reward-panel">
+    <h3>🌸 Daily Motivation</h3>
+    <h2 id="dailyQuote">You are capable of amazing things!</h2>
+    <p>One small step is still progress.</p>
+</div>
+
+<!-- ACHIEVEMENTS -->
+<div class="panel reward-panel">
+    <h3>🏆 My Achievements</h3>
+    <div id="achievementList"></div>
+</div>
+
+</section>
+
+<section id="goals" class="page hidden">
+    <h2>My Life Goals 🎯</h2>
+    <p>Turn your dreams into achievable actions.</p>
+
+    <div class="panel">
+        <h3>Create a New Goal</h3>
+
+        <input
+            id="goalInput"
+            placeholder="Example: Build my own house"
+        >
+
+        <label for="goalDeadline">Target date</label>
+        <input type="date" id="goalDeadline">
+
+        <button onclick="addGoal()">Create Goal</button>
+    </div>
+
+    <div id="goalList" class="panel"></div>
+</section>
+
+
+        <section id="tasks" class="page hidden">
+            <h2>Daily Planner 📅</h2>
+            <input id="taskInput" placeholder="What do you need to do?">
+            <button onclick="addTask()">Add Task</button>
+            <div id="taskList" class="panel"></div>
+        </section>
+
+<section id="rescue" class="page hidden">
+
+    <h2>Procrastination Rescue 🧠</h2>
+    <p>You don't need to finish everything. Just start with one small step.</p>
+
+    <div class="panel">
+        <h3>What's stopping you today?</h3>
+
+        <select id="stuckReason">
+            <option value="I don't know where to start">I don't know where to start</option>
+            <option value="I feel overwhelmed">I feel overwhelmed</option>
+            <option value="I'm distracted">I'm distracted</option>
+            <option value="I don't feel motivated">I don't feel motivated</option>
+        </select>
+
+        <p id="rescueMessage">Choose one small task. You can do this!</p>
+    </div>
+
+    <div class="panel focus-setup">
+        <h3>Focus Timer ⏳</h3>
+        <p>Choose how long you want to focus.</p>
+
+        <button onclick="startFocusTimer(5)">5 Minutes</button>
+        <button onclick="startFocusTimer(25)">25 Minutes</button>
+        <button onclick="startFocusTimer(50)">50 Minutes</button>
+    </div>
+
+    <div class="panel">
+        <h3>Completed Focus Sessions 🌟</h3>
+        <h2 id="sessionCount">0</h2>
+        <p>Every small effort counts!</p>
+    </div>
+
+    <!-- FULL SCREEN FOCUS MODE -->
+    <div id="focusOverlay" class="focus-overlay">
+
+        <button class="focus-exit" onclick="closeFocusMode()">
+            ✕ Exit Focus
+        </button>
+
+        <div class="focus-content">
+
+            <p class="focus-label">LIFE RESET • FOCUS MODE</p>
+
+            <h1>Time to focus.</h1>
+            <p class="focus-subtitle">One task. One step. No distractions.</p>
+
+            <div class="timer-circle" id="timerCircle">
+                <div class="timer-inner">
+                    <span id="focusTimer">05:00</span>
+                    <small id="focusStatus">READY TO FOCUS</small>
+                </div>
+            </div>
+
+            <div class="focus-controls">
+                <button onclick="pauseFocusTimer()" id="pauseButton">
+                    Pause
+                </button>
+
+                <button onclick="resumeFocusTimer()" id="resumeButton">
+                    Resume
+                </button>
+
+                <button onclick="resetFocusTimer()">
+                    Reset
+                </button>
+            </div>
+
+            <p class="focus-quote">You are building the life you dream about.</p>
+
+        </div>
+    </div>
+
+</section>
+        
+<section id="money" class="page hidden">
+    <h2>Money Management 💰</h2>
+    <p>Understand your money. Plan your future.</p>
+
+    <div class="cards">
+        <div class="card">
+            <p>Total Income</p>
+            <h2 id="incomeTotal">₹0</h2>
+        </div>
+        <div class="card">
+            <p>Total Expenses</p>
+            <h2 id="totalExpenses">₹0</h2>
+        </div>
+        <div class="card">
+            <p>Available Balance</p>
+            <h2 id="balanceTotal">₹0</h2>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3>Add Transaction</h3>
+
+        <select id="transactionType">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+        </select>
+
+        <input id="expenseName" placeholder="Transaction name">
+
+        <input id="expenseAmount" type="number"
+            min="0.01" step="0.01" placeholder="Amount in ₹">
+
+        <select id="expenseCategory">
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Education">Education</option>
+            <option value="Health">Health</option>
+            <option value="Bills">Bills</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Salary">Salary</option>
+            <option value="Freelance">Freelance</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <input id="expenseDate" type="date">
+
+        <button onclick="addTransaction()">Save Transaction</button>
+    </div>
+
+    <div class="panel">
+        <h3>Monthly Budget</h3>
+        <input id="budgetInput" type="number"
+            min="0" step="0.01" placeholder="Set monthly budget in ₹">
+        <button onclick="saveBudget()">Save Budget</button>
+        <p id="budgetSummary"></p>
+    </div>
+
+    <div class="panel">
+        <h3>Transaction History</h3>
+        <div id="expenseList"></div>
+    </div>
+</section>
+
+        <section id="habits" class="page hidden">
+
+    <h2>My Habits 🌱</h2>
+    <p>Small actions. Consistent effort. A better life.</p>
+
+    <div class="panel habit-create">
+        <h3>Create a New Habit</h3>
+
+        <input
+            id="habitInput"
+            type="text"
+            placeholder="Example: Read for 20 minutes"
+        >
+
+        <button onclick="addHabit()">+ Add Habit</button>
+    </div>
+
+    <div class="panel habit-summary">
+        <h3>Today's Progress</h3>
+
+        <h2 id="habitPercentage">0%</h2>
+
+        <div class="habit-progress-track">
+            <div id="habitProgressBar"></div>
+        </div>
+
+        <p id="habitSummaryText">Start your first habit today!</p>
+    </div>
+
+    <div class="panel">
+        <h3>My Weekly Habits 📅</h3>
+        <p>Tick each day when you complete a habit.</p>
+
+        <div id="habitList"></div>
+    </div>
+
+</section>
+
+<section id="journal" class="page hidden">
+
+    <h2>My Mood & Journal 🌷</h2>
+    <p>Take a moment for yourself. Your feelings matter.</p>
+
+    <div class="panel mood-create">
+
+        <h3>How are you feeling today?</h3>
+
+        <select id="moodInput">
+            <option value="😊 Happy">😊 Happy</option>
+            <option value="😌 Calm">😌 Calm</option>
+            <option value="🥰 Grateful">🥰 Grateful</option>
+            <option value="😔 Sad">😔 Sad</option>
+            <option value="😟 Anxious">😟 Anxious</option>
+            <option value="😤 Stressed">😤 Stressed</option>
+            <option value="😴 Tired">😴 Tired</option>
+            <option value="😐 Okay">😐 Okay</option>
+        </select>
+
+        <h3>Write about your day 📔</h3>
+
+        <textarea
+            id="journalInput"
+            placeholder="What happened today? What are you thinking or feeling? Write freely..."
+            rows="6"
+        ></textarea>
+
+        <button onclick="saveJournal()">Save Today's Entry</button>
+
+    </div>
+
+    <div class="panel mood-summary">
+        <h3>Your Journal Journey ✨</h3>
+        <h2 id="moodCount">0</h2>
+        <p>Total mood check-ins and journal entries</p>
+    </div>
+
+    <div class="panel">
+        <h3>My Previous Entries 📚</h3>
+        <div id="journalList"></div>
+    </div>
+
+</section>
+
+<section id="journal" class="page hidden">
+
+    <h2>My Mood & Journal 🌷</h2>
+    <p>Take a moment for yourself. Your feelings matter.</p>
+
+    <div class="panel mood-create">
+
+        <h3>How are you feeling today?</h3>
+
+        <select id="moodInput">
+            <option value="😊 Happy">😊 Happy</option>
+            <option value="😌 Calm">😌 Calm</option>
+            <option value="🥰 Grateful">🥰 Grateful</option>
+            <option value="😔 Sad">😔 Sad</option>
+            <option value="😟 Anxious">😟 Anxious</option>
+            <option value="😤 Stressed">😤 Stressed</option>
+            <option value="😴 Tired">😴 Tired</option>
+            <option value="😐 Okay">😐 Okay</option>
+        </select>
+
+        <h3>Write about your day 📔</h3>
+
+        <textarea
+            id="journalInput"
+            placeholder="What happened today? What are you thinking or feeling? Write freely..."
+            rows="6"
+        ></textarea>
+
+        <button onclick="saveJournal()">Save Today's Entry</button>
+
+    </div>
+
+    <div class="panel mood-summary">
+        <h3>Your Journal Journey ✨</h3>
+        <h2 id="moodCount">0</h2>
+        <p>Total mood check-ins and journal entries</p>
+    </div>
+
+    <div class="panel">
+        <h3>My Previous Entries 📚</h3>
+        <div id="journalList"></div>
+    </div>
+
+</section>
+
+<section id="career" class="page hidden">
+
+    <h2>Career & Learning 🎓</h2>
+    <p>Build your skills. Track your growth. Prepare for your future.</p>
+
+    <div class="panel">
+        <h3>Add a Learning Goal</h3>
+
+        <input
+            id="learningInput"
+            type="text"
+            placeholder="Example: Learn SQL"
+        >
+
+        <select id="learningCategory">
+            <option value="Technical Skill">Technical Skill</option>
+            <option value="Course">Course</option>
+            <option value="Career Preparation">Career Preparation</option>
+            <option value="Communication">Communication</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <button onclick="addLearningGoal()">Add Learning Goal</button>
+    </div>
+
+    <div class="panel">
+        <h3>My Learning Progress</h3>
+        <h2 id="learningPercentage">0%</h2>
+
+        <div class="habit-progress-track">
+            <div id="learningProgressBar"></div>
+        </div>
+
+        <p id="learningSummary">Start learning something new!</p>
+    </div>
+
+    <div class="panel">
+        <h3>My Learning Goals 📚</h3>
+        <div id="learningList"></div>
+    </div>
+
+</section>
+<section id="progress" class="page hidden">
+    <h2>My Progress 📊</h2>
+
+    <div class="panel" id="progressDetails">
+        Your progress will appear here.
+    </div>
+</section>
+
+<section id="routine" class="page hidden">
+
+    <h2>My Daily Routine 🌷</h2>
+    <p>Plan your day, one step at a time.</p>
+
+    <div class="panel">
+        <h3>Add an Activity</h3>
+
+        <input id="routineInput" type="text"
+            placeholder="Example: Practice SQL">
+
+        <label>Start Time</label>
+        <input id="routineStart" type="time">
+
+        <label>End Time</label>
+        <input id="routineEnd" type="time">
+
+        <button onclick="addRoutine()">Add Activity</button>
+    </div>
+
+    <div class="panel">
+        <h3>Today's Progress</h3>
+        <h2 id="routinePercentage">0%</h2>
+
+        <div class="habit-progress-track">
+            <div id="routineProgressBar"></div>
+        </div>
+
+        <p id="routineSummary">Start planning your day!</p>
+    </div>
+
+    <div class="panel">
+        <h3>My Schedule 📅</h3>
+        <div id="routineList"></div>
+    </div>
+
+</section>
+
+    </main>
+</div>
+
+<script src="app.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+            .then(() => console.log("LIFE RESET offline support ready!"))
+            .catch(error => console.log("Offline setup error:", error));
+    });
+}
+</script>
+
+</body>
+</html>
